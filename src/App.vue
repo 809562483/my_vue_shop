@@ -9,17 +9,24 @@
       </p>
       <el-button>el-button</el-button>
     </div>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>|
+      <router-link to="/views">views</router-link>|
+      <router-link to="/components">components</router-link>
+    </div>
+    <router-view/>
+    <HelloWorldd msg="Welcomeeee to Your Vue.js App"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorldd from './components/HelloWorld.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    HelloWorldd
   }
 }
 </script>
