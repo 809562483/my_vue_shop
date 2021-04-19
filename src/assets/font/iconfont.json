@@ -1,0 +1,23 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "20856386",
+      "name": "西瓜",
+      "font_class": "xigua",
+      "unicode": "e7ef",
+      "unicode_decimal": 59375
+    },
+    {
+      "icon_id": "20856401",
+      "name": "樱桃",
+      "font_class": "yingtao",
+      "unicode": "e7f2",
+      "unicode_decimal": 59378
+    }
+  ]
+}
