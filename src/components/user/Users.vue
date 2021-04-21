@@ -90,6 +90,39 @@
           <el-button type="primary" @click="submitModify">确 定</el-button>
         </span>
       </el-dialog>
+      <!-- 用户角色授权 -->
+      <el-dialog
+        title="分配角色"
+        :visible.sync="giveRoleDialogVisible"
+        width="30%"
+        @close="closeGiveRole"
+      >
+        <p>
+          当前的用户：<span>{{ nowuser.username }}</span>
+        </p>
+
+        <p>
+          当前的角色：<span>{{ nowuser.role_name }}</span>
+        </p>
+        <p>
+          分配新角色：<el-select
+            v-model="select"
+            slot="prepend"
+            placeholder="请选择"
+          >
+            <el-option
+              :label="item.roleName"
+              :value="item.id"
+              v-for="item in options"
+              :key="item.id"
+            ></el-option>
+          </el-select>
+        </p>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="giveRoleDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="submitGiveRole">确 定</el-button>
+        </span>
+      </el-dialog>
       <!-- 用户展示 -->
       <el-table :data="tableData" style="width: 100%" border stripe>
         <el-table-column type="index" width="50"> </el-table-column>
@@ -149,6 +182,7 @@
                 type="warning"
                 icon="el-icon-s-tools"
                 size="mini"
+                @click="openGiveRole(info.row)"
               ></el-button>
             </el-tooltip>
           </template>
@@ -222,10 +256,41 @@ export default {
           { required: true, message: '请输入手机号', trigger: 'blur' },
           { validator: checkMobile, trigger: 'blur' }
         ]
-      }
+      },
+      giveRoleDialogVisible: false,
+      nowuser: {},
+      select: '',
+      options: []
     }
   },
   methods: {
+    async openGiveRole(user) {
+      this.nowuser = user
+      const { data: res } = await this.$http.get('/roles')
+      if (res.meta.status !== 200)
+        return this.$message.error('角色列表获取失败')
+      this.options = res.data
+      this.giveRoleDialogVisible = true
+    },
+    closeGiveRole() {
+      this.select = ''
+      this.nowuser = {}
+    },
+    async submitGiveRole() {
+      console.log(this.select)
+      const { data: res } = await this.$http.put(
+        `/users/${this.nowuser.id}/role`,
+        {
+          rid: this.select
+        }
+      )
+      if (res.meta.status !== 200) {
+        return this.$message.error('分配角色失败')
+      }
+      this.$message.success('分配角色成功')
+      this.queryUsers()
+      this.giveRoleDialogVisible = false
+    },
     async queryUsers() {
       const { data: res } = await this.$http.get('/users', {
         params: this.queryParams
